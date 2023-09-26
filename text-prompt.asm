@@ -34,15 +34,11 @@ text_prompt_start:
 	push r7
 	
 	loadn r7, #10 ; tamanho do buffer de string
-	call mem_alloc
+	call mem_calloc ; comeca com a string toda vazia
 
 	loadn r6, #text_prompt_string_pointer
 	storei r6, r7 ; grava em text_prompt_string_pointer o pointer da string alocada
 	
-	loadn r7, #text_prompt_string_pointer
-	loadn r6, #9
-	;call empty_string ; coloca '\0' em toda a string (calloc)
-	;TODO TODO TODO
 	pop r7
 	pop r6
 	rts
@@ -117,13 +113,10 @@ text_prompt_loop:
 		call display_string
 		; alocar novamente o espaco para o text_promp_buffer
 		loadn r7, #10 ; tamanho do buffer de string
-		call mem_alloc
+		call mem_calloc
 		loadn r6, #text_prompt_string_pointer
 		store text_prompt_string_pointer, r7 ; grava em text_prompt_string_pointer o pointer da string alocada
 
-		load r7, text_prompt_string_pointer
-		loadn r6, #9
-		;call empty_string ; coloca '\0' em toda a string (calloc)
 		store text_prompt_cursor, r0 ; resetar o cursor para 0
 
 		call update_string_display
@@ -320,6 +313,45 @@ mem_alloc_return:
 	pop r3
 	pop r2
 	pop r1
+	pop r0
+	rts
+
+mem_empty:		; Rotina de setar toda a memoria em um bloco de memoria para 0
+				; Argumentos:
+				; r7 = memory_pointer, endereco da memoria a ser esvaziada
+				; Retorno: nenhum
+	push r0 ; 0
+	push r1 ; next_block
+	push r7 ; memory_pointer
+	loadn r0, #0
+	dec r7
+	loadi r1, r7 ; carrega o ponteiro do proximo bloco de memoria
+	inc r7 ; volta r7 ao valor do inicio desse bloco
+mem_empty_loop_check:
+	cmp r7, r1
+	jeq mem_empty_loop_end ; while (memory_pointer != next_block)
+mem_empty_loop:
+	storei r7, r0 ; *memory_pointer = 0
+	inc r7 ; memory_pointer++
+	jmp mem_empty_loop_check
+mem_empty_loop_end:
+	pop r7
+	pop r1
+	pop r0
+	rts
+
+mem_calloc:		; Rotina de alocar memoria toda iniciada em 0
+				; Argumentos:
+				; r7 = desired_size, tamanho do espaco a ser alocado
+				; Retorno:
+				; r7 = ponteiro do espaco alocado, NULL caso nao tenha conseguido
+	push r0 ; 0
+	loadn r0, #0
+	call mem_alloc
+	cmp r7, r0 ; if (memory_pointer != NULL)
+	jeq mem_calloc_allocation_failed
+	call mem_empty ; colocar zeros no bloco de memoria alocado
+mem_calloc_allocation_failed:
 	pop r0
 	rts
 
