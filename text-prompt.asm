@@ -4,7 +4,7 @@
 jmp main
 
 block_addr_pos : var #1
-dynamic_memory_block : var # 32
+dynamic_memory_block : var # 128
 block_end_addr_pos : var #1
 ;---- Inicio do Programa Principal -----
 main:
@@ -13,9 +13,14 @@ main:
 	loadn r6, #block_end_addr_pos ; addr final
 	call mem_move
 	call mem_init
+	; iniciando resolucoes da tela ----
+	loadn r7, #40
+	call drawing_screen_width
 	; ----
+	; iniciar processos
 	call text_prompt_start
 main_while_true:
+	; loop dos processos
 	call text_prompt_loop
 	jmp main_while_true
 	breakp
@@ -35,9 +40,9 @@ text_prompt_start:
 	storei r6, r7 ; grava em text_prompt_string_pointer o pointer da string alocada
 	
 	loadn r7, #text_prompt_string_pointer
-	load r6, #9
-	call empty_string ; coloca '\0' em toda a string (calloc)
-	
+	loadn r6, #9
+	;call empty_string ; coloca '\0' em toda a string (calloc)
+	;TODO TODO TODO
 	pop r7
 	pop r6
 	rts
@@ -77,7 +82,7 @@ text_prompt_loop:
 		cmp r1, r4
 		jle text_prompt_loop_is_backspace_check
 		cmp r1, r5
-		jge text_prompt_loop_is_backspace_check ; c <= 31 || c >= 127, nao eh char printavel
+		jeg text_prompt_loop_is_backspace_check ; c <= 31 || c >= 127, nao eh char printavel
 	text_prompt_loop_is_displayable_char:
 		add r3, r3, r2
 		storei r3, r1 ; *(s + cursor) = c
@@ -85,7 +90,7 @@ text_prompt_loop:
 		store text_prompt_cursor, r2 ; grava o valor do cursor na memoria
 		
 		load r7, text_prompt_string_pointer
-		call update_string_display ; TODO TODO TODO
+		call update_string_display
 		
 		jmp text_prompt_loop_is_displayable_char_end
 	text_prompt_loop_is_backspace_check:
@@ -95,30 +100,34 @@ text_prompt_loop:
 	text_prompt_loop_is_backspace:
 		add r3, r3, r2
 		storei r3, r0 ; *(s + cursor) = '\0'
-		dec r2
+		loadn r4, #1
+		sub r2, r2, r4 ; subtracao que para em 0
 		store text_prompt_cursor, r2 ; grava o valor do cursor na memoria
 		
 		load r7, text_prompt_string_pointer
-		call update_string_display ; TODO TODO TODO
+		call update_string_display
 		
 		jmp text_prompt_loop_is_displayable_char_end
 	text_prompt_loop_is_enter_check:
-		loadn r4, #27
+		loadn r4, #13
 		cmp r1, r4
-		jne text_prompt_loop_is_displayable_char_end ; c == 27, eh o '\n'		
+		jne text_prompt_loop_is_displayable_char_end ; c == 13, eh o '\r' (teclado WHYYYYY)		
 	text_prompt_loop_is_enter:
-		
 		load r7, text_prompt_string_pointer
-		call display_string ; TODO TODO TODO
-		
+		call display_string
 		; alocar novamente o espaco para o text_promp_buffer
 		loadn r7, #10 ; tamanho do buffer de string
 		call mem_alloc
 		loadn r6, #text_prompt_string_pointer
-		storei r6, r7 ; grava em text_prompt_string_pointer o pointer da string alocada	
-		loadn r7, #text_prompt_string_pointer
-		load r6, #9
-		call empty_string ; coloca '\0' em toda a string (calloc)
+		store text_prompt_string_pointer, r7 ; grava em text_prompt_string_pointer o pointer da string alocada
+
+		load r7, text_prompt_string_pointer
+		loadn r6, #9
+		;call empty_string ; coloca '\0' em toda a string (calloc)
+		store text_prompt_cursor, r0 ; resetar o cursor para 0
+
+		call update_string_display
+		; TODO TODO TODO
 		
 	text_prompt_loop_is_displayable_char_end:
 
@@ -134,6 +143,53 @@ text_prompt_loop_return:
 	pop r0
 	rts
 ; rotinas do prompt de texto
+set_canvas_for_update_string_display:
+	push r6
+	push r7
+	; configurando o canvas do update_string_display ----
+	; setar o tamanho do canvas
+	loadn r7, #10
+	loadn r6, #1
+	call canvas_set_resolution
+	; setar a posicao da origem do canvas
+	loadn r7, #0
+	loadn r6, #28
+	call canvas_set_origin
+	; setar a posicao inicial do cursor do canvas
+	loadn r7, #0
+	loadn r6, #0
+	call canvas_move_cursor_xy
+	; ----
+	pop r7
+	pop r6
+	rts
+update_string_display:
+	push r6 ; argumento de funcs
+	push r7 ; ponteiro da string
+	call set_canvas_for_update_string_display
+	; r7
+	loadn r6, #0 ; branco
+	call print_string
+	; ----
+	pop r7
+	pop r6
+	rts
+
+text_promt_empty_string : string "          "
+display_string:
+	push r6
+	push r7 ; ponteiro da string
+	call set_canvas_for_update_string_display
+	call mem_free
+	loadn r7, #text_promt_empty_string 
+	loadn r6, #0
+	call print_string
+	; TODO Printar a string no canvas legal
+	;call mem_free ; libera o bloco de mem
+	pop r7
+	pop r6
+	rts
+
 ; fim do prompt de texto
 
 ; ----- BIBLIOTECAS -----
