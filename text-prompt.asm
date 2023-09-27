@@ -33,7 +33,7 @@ text_prompt_start:
 	push r6
 	push r7
 	
-	loadn r7, #10 ; tamanho do buffer de string
+	loadn r7, #41 ; tamanho do buffer de string
 	call mem_calloc ; comeca com a string toda vazia
 
 	loadn r6, #text_prompt_string_pointer
@@ -70,9 +70,9 @@ text_prompt_loop:
 	text_prompt_loop_return_if_same_char_end:
 	
 	text_prompt_loop_is_displayable_char_check:
-		loadn r4, #9
+		loadn r4, #40
 		cmp r2, r4
-		jeg text_prompt_loop_is_backspace_check ; cursor >= 9, alem da string
+		jeg text_prompt_loop_is_backspace_check ; cursor >= 40, alem da string
 		loadn r4, #31
 		loadn r5, #127
 		cmp r1, r4
@@ -94,13 +94,14 @@ text_prompt_loop:
 		cmp r1, r4
 		jne text_prompt_loop_is_enter_check ; c == 8, eh o backspace
 	text_prompt_loop_is_backspace:
-		add r3, r3, r2
-		storei r3, r0 ; *(s + cursor) = '\0'
 		loadn r4, #1
-		sub r2, r2, r4 ; subtracao que para em 0
+		sub r2, r2, r4 ; subtracao de u_int (nao da underflow)
 		store text_prompt_cursor, r2 ; grava o valor do cursor na memoria
 		
+		add r3, r3, r2
+		storei r3, r0 ; *(s + cursor) = '\0'
 		load r7, text_prompt_string_pointer
+
 		call update_string_display
 		
 		jmp text_prompt_loop_is_displayable_char_end
@@ -112,7 +113,7 @@ text_prompt_loop:
 		load r7, text_prompt_string_pointer
 		call display_string
 		; alocar novamente o espaco para o text_promp_buffer
-		loadn r7, #10 ; tamanho do buffer de string
+		loadn r7, #41 ; tamanho do buffer de string
 		call mem_calloc
 		loadn r6, #text_prompt_string_pointer
 		store text_prompt_string_pointer, r7 ; grava em text_prompt_string_pointer o pointer da string alocada
@@ -141,7 +142,7 @@ set_canvas_for_update_string_display:
 	push r7
 	; configurando o canvas do update_string_display ----
 	; setar o tamanho do canvas
-	loadn r7, #10
+	loadn r7, #40
 	loadn r6, #1
 	call canvas_set_resolution
 	; setar a posicao da origem do canvas
@@ -160,6 +161,7 @@ update_string_display:
 	push r6 ; argumento de funcs
 	push r7 ; ponteiro da string
 	call set_canvas_for_update_string_display
+	call canvas_clear
 	; r7
 	loadn r6, #0 ; branco
 	call print_string
@@ -168,15 +170,11 @@ update_string_display:
 	pop r6
 	rts
 
-text_promt_empty_string : string "          "
 display_string:
 	push r6
 	push r7 ; ponteiro da string
 	call set_canvas_for_update_string_display
 	call mem_free
-	loadn r7, #text_promt_empty_string 
-	loadn r6, #0
-	call print_string
 	; TODO Printar a string no canvas legal
 	;call mem_free ; libera o bloco de mem
 	pop r7
@@ -510,6 +508,54 @@ canvas_move_cursor_too_big:
 	loadn r7, #1
 canvas_move_cursor_return:
 	pop r6
+	pop r0
+	rts
+
+canvas_clear:		; Rotina de limpar o canvas atual
+			; Argumentos: nenhum
+			; Retorno: nenhum
+	push r0 ; 0
+	push r1 ; pos_on_screen
+	push r2 ; pos_x_on_canvas
+	push r3 ; pos_y_on_canvas
+	push r4 ; canvas_start_pos_x
+	push r5 ; canvas_start_pos_y
+	push r6 ; screen_width
+	
+	loadn r0, #0
+	load r4, canvas_start_pos_x
+	load r5, canvas_start_pos_y
+	load r6, screen_width
+	
+	load r3, canvas_resolution_y ; carrega o tamanho de y no canvas
+canvas_clear_loop_y_check: ; while (pos_y_on_canvas != 0) {
+	cmp r3, r0
+	jeq canvas_clear_loop_y_end
+canvas_clear_loop_y:
+	dec r3
+	load r2, canvas_resolution_x ; carrega o tamanho de x no canvas
+	canvas_clear_loop_x_check: ; while (pos_x_on_canvas != 0) {
+		cmp r2, r0
+		jeq canvas_clear_loop_x_end
+	canvas_clear_loop_x:
+		dec r2
+
+		add r1, r3, r5
+		mul r1, r1, r6
+		add r1, r1, r4
+		add r1, r1, r2
+		; r1 = x + x0 + (y + y0) * W
+		outchar r0, r1 ; desenha char vazio na pos de r1
+		jmp canvas_clear_loop_x_check
+	canvas_clear_loop_x_end: ; }
+	jmp canvas_clear_loop_y_check
+canvas_clear_loop_y_end: ; }
+	pop r6
+	pop r5
+	pop r4
+	pop r3
+	pop r2
+	pop r1
 	pop r0
 	rts
 
