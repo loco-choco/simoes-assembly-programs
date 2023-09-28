@@ -180,8 +180,15 @@ display_string:
 	pop r7
 	pop r6
 	rts
-
 ; fim do prompt de texto
+
+; rotinas do rpg de texto
+; status: rendering, waiting
+; rendering -> renderizando a imagem/texto, fazer uma linha por loop para nao bloquear muito o text_prompt
+; waiting -> esperando a saida o text_prompt, quando receber muda, faz o processamento e muda para rendering
+
+dating_sim_loop:
+
 
 ; ----- BIBLIOTECAS -----
 ; -----   MALLOC    -----
@@ -587,10 +594,35 @@ print_char:		; Rotina de printar o caracter na posicao atual do cursor no canvas
 			; r6 = color, cor do caracter
 			; Retorno: 
 			; r7 = aviso de fim de canvas, setado caso printou na ultima posicao do buffer
-	call draw_char
-	load r7, canvas_cursor_pos
-	inc r7 ; canvas_cursor_pos + 1
-	call canvas_move_cursor ; a rotina vai retornar 1 caso chegamos no fim, e ira andar o cursor um para frente
+	push r0; constantes
+	push r6
+	print_char_drawable_char_check:
+		loadn r0, #31
+		cmp r7, r0
+		jle print_char_newline_check
+		loadn r0, #127
+		cmp r7, r0
+		jeg print_char_newline_check
+	print_char_drawable_char:
+		call draw_char
+		load r7, canvas_cursor_pos
+		inc r7 ; canvas_cursor_pos + 1
+		call canvas_move_cursor ; a rotina vai retornar 1 caso chegamos no fim, e ira andar o cursor um para frente
+		jmp print_char_drawable_char_end
+	print_char_newline_check:
+		loadn r0, #10 ; /n
+		cmp r7, r0
+		jeq print_char_newline
+		loadn r0, #13 ; /r
+		jne print_char_drawable_char_end
+	print_char_newline:
+		loadn r7, #0
+		load r6, canvas_cursor_pos_y
+		inc r6 ; vai para o inicio da prox linha
+		call canvas_move_cursor_xy
+	print_char_drawable_char_end:
+	pop r6
+	pop r0
 	rts
 
 print_string:		; Rotina de printar uma string a partir da posicao atual
