@@ -117,7 +117,7 @@ text_prompt_loop:
 		jne text_prompt_loop_is_displayable_char_end ; c == 13, eh o '\r' (teclado WHYYYYY)		
 	text_prompt_loop_is_enter:
 		load r7, text_prompt_string_pointer
-		call display_string
+		call send_string ; envia a string para o outro processo
 		; alocar novamente o espaco para o text_promp_buffer
 		loadn r7, #41 ; tamanho do buffer de string
 		call mem_calloc
@@ -176,14 +176,17 @@ update_string_display:
 	pop r6
 	rts
 
-display_string:
+send_string:
 	push r6
 	push r7 ; ponteiro da string
+
+	;loadn r7, #file_name_start
+	;call dating_sim_parse_file
+
+	call dating_sim_receive_option
+	
 	call mem_free
-	loadn r7, #file_name_start
-	call dating_sim_parse_file
-	; TODO Printar a string no canvas legal
-	;call mem_free ; libera o bloco de mem
+
 	pop r7
 	pop r6
 	rts
@@ -201,15 +204,18 @@ file_name_start : string "start"
 dating_sim_start:
 	push r7
 
-	loadn r7, #file_name_test
-	call reset_canvas_character_1
-	call file_open
-	store character_1_file, r7
+	;loadn r7, #file_name_test
+	;call reset_canvas_character_1
+	;call file_open
+	;store character_1_file, r7
 
-	loadn r7, #file_name_test_2
-	call reset_canvas_character_2
-	call file_open
-	store character_2_file, r7
+	;loadn r7, #file_name_test_2
+	;call reset_canvas_character_2
+	;call file_open
+	;store character_2_file, r7
+
+	loadn r7, #file_name_start
+	call dating_sim_parse_file
 
 	pop r7
 	rts
@@ -221,7 +227,57 @@ dating_sim_loop:
 	rts
 
 ; logica de parse de arquivo e entrada de dado ---------
+dating_sim_receive_option:
+	push r0 ; 0
+	push r3 ; position
+	push r4 ; size
+	push r5 ; options_vector
+	push r6 ; char * option = options_vector[position]
+	push r7 ; char * choosen_option
 
+	loadn r0, #0
+	loadn r3, #0
+	load r4, options_vector_size
+	loadn r5, #options_vector
+dating_sim_receive_option_loop_check: ; while(position < size && string_starts_with(choosen_option, option) != 0)
+	cmp r3, r4
+	jeg dating_sim_receive_option_loop_end
+	
+	loadi r6, r5 ; options_vector[position]
+	call string_starts_with
+	cmp r6, r0
+	jeq dating_sim_receive_option_loop_end
+dating_sim_receive_option_loop:
+	inc r5
+	inc r5
+	inc r3
+	inc r3; position += 2
+	jmp dating_sim_receive_option_loop_check
+dating_sim_receive_option_loop_end:
+	; se estamos aqui ou acabamos as opcoes (position >= size) ou temos a opcao que queremos em position+1
+dating_sim_receive_option_valid_selection_check:
+	cmp r3, r4
+	jeg dating_sim_receive_option_valid_selection_end
+dating_sim_receive_option_valid_selection:
+	inc r5
+	loadi r7, r5; options_vector[position + 1]
+	call dating_sim_parse_option ; temos opcao valida, passar ela para o parse_option
+dating_sim_receive_option_valid_selection_end:
+	pop r7
+	pop r6
+	pop r5
+	pop r4
+	pop r3
+	pop r0
+	rts
+
+dating_sim_parse_option: ; transforma a opcao escolhida em um dating_sim_parse_file ou em outra coisa
+	push r7
+
+	call dating_sim_parse_file
+
+	pop r7
+	rts
 dating_sim_parse_file:
 	push r0 ; 0
 	push r1 ; FILE *
@@ -789,18 +845,40 @@ sins in your past cycles.
 You must find a mate, or die. 
 Which direction do you head?
 
-North
-north_1.txt
-East
-east_1.txt
-South
-south_1.txt
-West
-west_1.txt
-Down
-down_1.txt"
+north
+north
+east
+east
+south
+south
+west
+west
+down
+down"
 file_3_eof : var #1
 	static file_3_eof + #0, #65535 ; EOF(FFFF)
+file_4_name : string "north" ; 6 bytes
+file_4_name_padding : var #8 ; 8 de padding para dar 14 bytes de file_name
+file_4_cursor : var #1
+file_4_data : string "2304
+sm2
+3072
+at1
+
+Which direction do you head?
+
+start
+start
+East
+east
+South
+south
+West
+west
+Down
+down"
+file_4_eof : var #1
+	static file_4_eof + #0, #65535 ; EOF(FFFF)
 end_of_file_system : var #1
 	static end_of_file_system + #0, #65534 ; EOFS (FFFE), marca que nao ha mais arquivos no file system
 ;--------
@@ -1576,7 +1654,39 @@ string_compare_loop_end: ; } while( char_a != '\0' && char_b != '\0' && char_a !
 	pop r1
 	pop r0
 	rts
-	
+
+string_starts_with:		; Rotina de conferir se uma string comeca com outra
+				; Argumentos:
+				; r6 = endereco da string base
+				; r7 = endereco da string que queremos conferir se faz parte do inicio da string base
+				; Retorno: 
+				; r6 = 0, se a string rm r6 fazer parte do inicio da de r7, outro valor caso nao
+	push r0 ; 0
+	push r1 ; char_base
+	push r2 ; char_comp
+	; r6, s_comp
+	push r7 ; char * s_base
+	loadn r0, #0
+string_starts_with_loop: ; do {
+	loadi r1, r7 ; char_comp = *s_comp;	
+	loadi r2, r6 ; char_base = *s_base;	
+	inc r6 ; vai para a prox pos no s_base
+	inc r7 ; vai para a prox pos no s_comp
+	cmp r1, r0
+	jeq string_starts_with_loop_end
+	cmp r2, r0
+	jeq string_starts_with_loop_end
+	cmp r1, r2
+	jeq string_starts_with_loop
+string_starts_with_loop_end: ; } while( char_base != '\0' && char_comp != '\0' && char_base != char_comp)
+	; se chegamos aqui, e char_comp == '\0', significa que todo o inicio da s_base contem s_comp, portanto r6 = 0, se nao, r6 = char_comp
+	mov r6, r1
+	pop r7
+	pop r2
+	pop r1
+	pop r0
+	rts	
+
 string_copy:			; Rotina de copiar a string de um endereco para outro
 				; Argumentos:
 				; r7 = endereco do destino string
