@@ -237,18 +237,34 @@ dating_sim_parse_file:
 	loadn r7, #15
 	call mem_calloc ; alocou espaco para string de 14 chars (tamanho maximo do file_name)
 	mov r5, r7 ; char *
-
+	
+	; lendo cor personagem 1
+	loadn r6, #14 ; tamanho maximo para ler
+	; r5, char *
+	mov r7, r1 ; FILE *
+	call file_read_string ; le a cor para a imagem do personagem 1
+	mov r7, r5 ; char *
+	call convert_string_base_10_to_int ; string -> int/cor
+	store character_1_color, r7
 	; lendo personagem 1
 	loadn r6, #14 ; tamanho maximo para ler
 	; r5, char *
 	mov r7, r1 ; FILE *
 	call file_read_string ; le o nome do arquivo que contem a imagem do personagem 1
-
+	
 	call reset_canvas_character_1
 	mov r7, r5 ; char *
 	call file_open
 	store character_1_file, r7 ; reseta o canvas de char 1, abre o arquivo dele e seta a variavel que vai conter esse ponteiro de arquivo
 
+	; lendo cor personagem 2
+	loadn r6, #14 ; tamanho maximo para ler
+	; r5, char *
+	mov r7, r1 ; FILE *
+	call file_read_string ; le a cor para a imagem do personagem 1
+	mov r7, r5 ; char *
+	call convert_string_base_10_to_int ; string -> int/cor
+	store character_2_color, r7
 	; lendo personagem 2
 	loadn r6, #14 ; tamanho maximo para ler, 
 	; r5, char *
@@ -316,6 +332,7 @@ dating_sim_parse_file_return:
 character_1_line : var #19
 character_1_canvas_cursor : var #1
 character_1_file : var #1
+character_1_color : var #1
 setup_canvas_character_1:
 	push r6
 	push r7
@@ -375,7 +392,7 @@ display_character_1_file_not_null:
 	cmp r6, r0
 	jeq display_character_1_file_not_null_end ; if(result == 0), chegamos no EOF, retornar agora
 	mov r7, r5 ; r7 = character_1_line
-	mov r6, r0 ; r6 = white
+	load r6, character_1_color ; r6 = character_1_color
 	call print_string
 	load r1, canvas_cursor_pos
 	store character_1_canvas_cursor, r1 ; salva a ultima posicao do cursor desse canvas
@@ -390,6 +407,7 @@ display_character_1_file_not_null_end:
 character_2_line : var #19
 character_2_canvas_cursor : var #1
 character_2_file : var #1
+character_2_color : var #1
 setup_canvas_character_2:
 	push r6
 	push r7
@@ -448,7 +466,7 @@ display_character_2_file_not_null:
 	cmp r6, r0
 	jeq display_character_2_file_not_null_end ; if(result == 0), chegamos no EOF, retornar agora
 	mov r7, r5 ; r7 = character_2_line
-	mov r6, r0 ; r6 = white
+	load r6, character_2_color ; r6 = character_2_color
 	call print_string
 	load r1, canvas_cursor_pos
 	store character_2_canvas_cursor, r1 ; salva a ultima posicao do cursor desse canvas
@@ -760,8 +778,10 @@ file_2_eof : var #1
 file_3_name : string "start" ; 6 bytes
 file_3_name_padding : var #8 ; 8 de padding para dar 14 bytes de file_name
 file_3_cursor : var #1
-file_3_data : string "at1
+file_3_data : string "3072
 sm2
+2304
+at1
 
 You have been through hell and back,
 but now, it's time to atone for your
