@@ -4,8 +4,9 @@
 jmp main
 
 block_addr_pos : var #1
-dynamic_memory_block : var # 128
+dynamic_memory_block : var # 1200
 block_end_addr_pos : var #1
+mem_defrag_timer : var #1
 ;---- Inicio do Programa Principal -----
 main:
 	; iniciando memoria dinamica ----
@@ -152,7 +153,7 @@ set_canvas_for_update_string_display:
 	call canvas_set_resolution
 	; setar a posicao da origem do canvas
 	loadn r7, #0
-	loadn r6, #28
+	loadn r6, #29
 	call canvas_set_origin
 	; setar a posicao inicial do cursor do canvas
 	loadn r7, #0
@@ -178,8 +179,9 @@ update_string_display:
 display_string:
 	push r6
 	push r7 ; ponteiro da string
-	call set_canvas_for_update_string_display
 	call mem_free
+	loadn r7, #file_name_start
+	call dating_sim_parse_file
 	; TODO Printar a string no canvas legal
 	;call mem_free ; libera o bloco de mem
 	pop r7
@@ -195,25 +197,121 @@ display_string:
 
 file_name_test : string "sm2"
 file_name_test_2 : string "at1"
+file_name_start : string "start"
 dating_sim_start:
 	push r7
 
 	loadn r7, #file_name_test
+	call reset_canvas_character_1
 	call file_open
 	store character_1_file, r7
-	call reset_canvas_character_1
 
 	loadn r7, #file_name_test_2
+	call reset_canvas_character_2
 	call file_open
 	store character_2_file, r7
-	call reset_canvas_character_2
 
 	pop r7
 	rts
 dating_sim_loop:
 	call display_character_1
 	call display_character_2
+	call display_text
+	call display_options
 	rts
+
+; logica de parse de arquivo e entrada de dado ---------
+
+dating_sim_parse_file:
+	push r0 ; 0
+	push r1 ; FILE *
+	push r2 ; string alocada
+	push r5 ; arg de funcao / char *
+	push r6 ; arg de funcao
+	push r7 ; file_name, e arg de funcoes
+	call file_open
+	cmp r7, r0
+	jeq dating_sim_parse_file_return ; se o arquivo nao existe (NULL) retornar mais cedo
+	mov r1, r7 ; guarda o ponteiro de arquivo em r1
+
+	loadn r7, #15
+	call mem_calloc ; alocou espaco para string de 14 chars (tamanho maximo do file_name)
+	mov r5, r7 ; char *
+
+	; lendo personagem 1
+	loadn r6, #14 ; tamanho maximo para ler
+	; r5, char *
+	mov r7, r1 ; FILE *
+	call file_read_string ; le o nome do arquivo que contem a imagem do personagem 1
+
+	call reset_canvas_character_1
+	mov r7, r5 ; char *
+	call file_open
+	store character_1_file, r7 ; reseta o canvas de char 1, abre o arquivo dele e seta a variavel que vai conter esse ponteiro de arquivo
+
+	; lendo personagem 2
+	loadn r6, #14 ; tamanho maximo para ler, 
+	; r5, char *
+	mov r7, r1 ; FILE *
+	call file_read_string ; le o nome do arquivo que contem a imagem do personagem 2
+
+	call reset_canvas_character_2
+	mov r7, r5 ; char *
+	call file_open
+	store character_2_file, r7 ; reseta o canvas de char 2, abre o arquivo dele e seta a variavel que vai conter esse ponteiro de arquivo
+	; pulando de ler personagem para ler texto
+	; char *
+	loadn r6, #14 ; tamanho maximo para ler
+	mov r7, r1 ; FILE *
+	call file_read_string ; le uma string vazia
+	mov r7, r5
+	call mem_free ; nao precisamos mais da string desse tamanho, dealocando ...
+	; lendo texto
+	call reset_canvas_text
+	dating_sim_parse_file_text_loop:
+		loadn r7, #41
+		call mem_calloc
+		mov r5, r7 ; char *
+		loadn r6, #40 ; tamanho maximo para ler
+		mov r7, r1 ; FILE *
+		call file_read_string ; le linha do texto (ou parte dela) 
+		mov r7, r5
+		call add_to_text_lines
+	dating_sim_parse_file_text_check:
+		loadi r5, r5 ; r5 = primeiro char de char *
+		cmp r5, r0
+		jne dating_sim_parse_file_text_loop ; r5 != '\0', ou seja, continuar ate encontrar uma string vazia
+	dating_sim_parse_file_text_end:
+	; lendo opcoes
+	call reset_canvas_options
+	dating_sim_parse_file_options_loop:
+		loadn r7, #41
+		call mem_calloc
+		mov r5, r7 ; char *
+		loadn r6, #40 ; tamanho maximo para ler
+		mov r7, r1 ; FILE *
+		call file_read_string ; em loop par le opcao para o jogador, em loop impar le a acao da opcao (ie ir para outro arquivo) 
+		mov r7, r5
+		call add_to_options_vector
+	dating_sim_parse_file_options_check:
+		loadi r5, r5 ; r5 = primeiro char de char *
+		cmp r5, r0
+		jne dating_sim_parse_file_options_loop ; r5 != '\0', ou seja, continuar ate encontrar uma string vazia
+	dating_sim_parse_file_options_end:
+	; fechando o arquivo, nao precisamos mais dele
+	mov r7, r1
+	call file_close
+	; IMPORTANTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	call mem_defrag ; esse eh o local do codigo que mais faz alocacao e dealocacao, entao para sanitanizar bem a memoria dinamica desfragmentamos aqui 
+dating_sim_parse_file_return:
+	pop r7
+	pop r6
+	pop r5
+	pop r2
+	pop r1
+	pop r0
+	rts
+; logica de desenho ---------
 ; desenhar o personagem 1 ----
 character_1_line : var #19
 character_1_canvas_cursor : var #1
@@ -224,7 +322,7 @@ setup_canvas_character_1:
 	; configurando o canvas do display_character_1 ----
 	; setar o tamanho do canvas
 	loadn r7, #18
-	loadn r6, #19
+	loadn r6, #18
 	call canvas_set_resolution
 	; setar a posicao da origem do canvas
 	loadn r7, #0
@@ -237,10 +335,23 @@ setup_canvas_character_1:
 	pop r7
 	pop r6
 	rts
+
 reset_canvas_character_1:
 	push r0 ; 0
+	push r7 ; character_1_file
+
 	loadn r0, #0
 	store character_1_canvas_cursor, r0
+reset_canvas_character_1_close_file_check:
+	load r7, character_1_file
+	cmp r7, r0
+	jeq reset_canvas_character_1_close_file_end ; se nao temos arquivos (NULL) nao fechar
+reset_canvas_character_1_close_file:
+	call file_close
+reset_canvas_character_1_close_file_end:
+	store character_1_file, r0 ; guarda que nao temos mais arquivo
+
+	pop r7
 	pop r0
 	rts
 display_character_1:
@@ -285,7 +396,7 @@ setup_canvas_character_2:
 	; configurando o canvas do display_character_2 ----
 	; setar o tamanho do canvas
 	loadn r7, #18
-	loadn r6, #19
+	loadn r6, #18
 	call canvas_set_resolution
 	; setar a posicao da origem do canvas
 	loadn r7, #22
@@ -300,8 +411,20 @@ setup_canvas_character_2:
 	rts
 reset_canvas_character_2:
 	push r0 ; 0
+	push r7 ; character_2_file
 	loadn r0, #0
+
 	store character_2_canvas_cursor, r0
+reset_canvas_character_2_close_file_check:
+	load r7, character_2_file
+	cmp r7, r0
+	jeq reset_canvas_character_2_close_file_end ; se nao temos arquivos (NULL) nao fechar
+reset_canvas_character_2_close_file:
+	call file_close
+reset_canvas_character_2_close_file_end:
+	store character_2_file, r0 ; guarda que nao temos mais arquivo
+
+	pop r7
 	pop r0
 	rts
 display_character_2:
@@ -333,6 +456,250 @@ display_character_2_file_not_null_end:
 	pop r7
 	pop r6
 	pop r5
+	pop r1
+	pop r0
+	rts
+; desenhar o texto ----
+text_lines : var #6
+text_lines_size : var #1
+text_lines_max_size : var #1
+	static text_lines_max_size + #0, #6
+; adicionar e dar free no vetor de strings --
+add_to_text_lines:
+	push r0 ; max_size e text_lines
+	push r1 ; size
+	push r7 ; char * s (texto de entrada)
+add_to_text_lines_not_full:
+	load r1, text_lines_size
+	load r0, text_lines_max_size
+	cmp r1, r0
+	jeg add_to_text_lines_full
+add_to_text_lines_not_full_check:
+	loadn r0, #text_lines
+	add r0, r0, r1 ; text_lines[size]
+	storei r0, r7 ; text_lines[size] = s
+	inc r1
+	store text_lines_size, r1
+	jmp add_to_text_lines_not_full_end
+add_to_text_lines_full:
+	call mem_free ; recebemos a string, mas nao vamos usar, entao dealocar
+add_to_text_lines_not_full_end:
+	pop r7
+	pop r1
+	pop r0
+	rts
+
+free_text_lines:
+	push r0; 0
+	push r1; size
+	push r2 ; text_lines + size
+	push r7 ; text_lines[size]
+	
+	loadn r0, #0
+	load r1, text_lines_size
+free_text_lines_loop_check:
+	cmp r1, r0
+	jel free_text_lines_loop_end
+free_text_lines_loop:
+	dec r1
+	loadn r2, #text_lines
+	add r2, r2, r1
+	loadi r7, r2
+	call mem_free ; libera a string do vetor de string
+	jmp free_text_lines_loop_check
+free_text_lines_loop_end:
+	store text_lines_size, r1
+	pop r7
+	pop r2
+	pop r1
+	pop r0
+	rts
+; --
+text_canvas_cursor : var #1
+text_lines_current_line : var #1
+setup_canvas_text:
+	push r6
+	push r7
+	; configurando o canvas do display_text ----
+	; setar o tamanho do canvas
+	loadn r7, #40
+	loadn r6, #6
+	call canvas_set_resolution
+	; setar a posicao da origem do canvas
+	loadn r7, #0
+	loadn r6, #18
+	call canvas_set_origin
+	; setar a posicao anterior do cursor do canvas
+	load r7, text_canvas_cursor
+	call canvas_move_cursor
+	; ----
+	pop r7
+	pop r6
+	rts
+reset_canvas_text:
+	push r0 ; 0
+	loadn r0, #0
+	store text_canvas_cursor, r0
+	store text_lines_current_line, r0
+	call free_text_lines
+	pop r0
+	rts
+
+display_text:
+	push r0 ; text_lines_size
+	push r1 ; text_canvas_cursor
+	push r2 ; text_lines_current_line
+	push r6 ; color
+	push r7 ; text_lines[text_lines_current_line]
+
+	load r0, text_lines_size
+	load r2, text_lines_current_line
+	call setup_canvas_text
+display_text_lines_left_check:
+	cmp r2, r0
+	jeg display_text_lines_left_end
+display_text_lines_left:
+	loadn r7, #text_lines
+	add r7, r7, r2 
+	loadi r7, r7; text_lines[text_lines_current_line]
+	loadn r6, #1536 ; r6 = amarelo
+	call print_string
+
+	loadn r7, #10 ; \n
+	call print_char ; pular uma linha, pois cada 40 chars eh uma linha completa, ou acaba antes, e precisa de \n
+
+	inc r2
+	store text_lines_current_line, r2 ; text_lines_current_line++
+
+	load r1, canvas_cursor_pos
+	store text_canvas_cursor, r1 ; salva a ultima posicao do cursor desse canvas
+display_text_lines_left_end:
+	pop r7
+	pop r6
+	pop r2
+	pop r1
+	pop r0
+	rts
+
+; desenhar as opcoes ----
+options_vector : var #10
+options_vector_size : var #1
+options_vector_max_size : var #1
+	static options_vector_max_size + #0, #10
+; adicionar e dar free no vetor de strings --
+add_to_options_vector:
+	push r0 ; max_size e options_vector
+	push r1 ; size
+	push r7
+add_to_options_vector_not_full:
+	load r1, options_vector_size
+	load r0, options_vector_max_size
+	cmp r1, r0
+	jeg add_to_options_vector_full
+add_to_options_vector_not_full_check:
+	loadn r0, #options_vector
+	add r0, r0, r1 ; options_vector[size]
+	storei r0, r7 ; options_vector[size] = s
+	inc r1
+	store options_vector_size, r1
+	jmp add_to_options_vector_not_full_end
+add_to_options_vector_full:
+	call mem_free ; recebemos a string, mas nao vamos usar, entao dealocar
+add_to_options_vector_not_full_end:
+	pop r7
+	pop r1
+	pop r0
+	rts
+
+free_options_vector:
+	push r0; 0
+	push r1; size
+	push r2 ; options_vector + size
+	push r7 ; options_vector[size]
+	
+	loadn r0, #0
+	load r1, options_vector_size
+free_options_vector_loop_check:
+	cmp r1, r0
+	jel free_options_vector_loop_end
+free_options_vector_loop:
+	dec r1
+	loadn r2, #options_vector
+	add r2, r2, r1
+	loadi r7, r2
+	call mem_free ; libera a string do vetor de string
+	jmp free_options_vector_loop_check
+free_options_vector_loop_end:
+	store options_vector_size, r1
+	pop r7
+	pop r2
+	pop r1
+	pop r0
+	rts
+; --
+options_canvas_cursor : var #1
+options_vector_current_option : var #1
+setup_canvas_options:
+	push r6
+	push r7
+	; configurando o canvas do display_options ----
+	; setar o tamanho do canvas
+	loadn r7, #40
+	loadn r6, #5
+	call canvas_set_resolution
+	; setar a posicao da origem do canvas
+	loadn r7, #0
+	loadn r6, #24
+	call canvas_set_origin
+	; setar a posicao anterior do cursor do canvas
+	load r7, options_canvas_cursor
+	call canvas_move_cursor
+	; ----
+	pop r7
+	pop r6
+	rts
+reset_canvas_options:
+	push r0 ; 0
+	loadn r0, #0
+	store options_canvas_cursor, r0
+	store options_vector_current_option, r0
+	call free_options_vector
+	pop r0
+	rts
+
+display_options:
+	push r0 ; options_vector_size
+	push r1 ; options_canvas_cursor
+	push r2 ; options_vector_current_option
+	push r6 ; color
+	push r7 ; options_vector[options_vector_current_option]
+
+	load r0, options_vector_size
+	load r2, options_vector_current_option
+	call setup_canvas_options
+display_options_options_left_check:
+	cmp r2, r0
+	jeg display_options_options_left_end
+display_options_options_left:
+	loadn r7, #options_vector
+	add r7, r7, r2 
+	loadi r7, r7; toptions_vector[options_vector_current_option]
+	loadn r6, #3584 ; r6 = aqua
+	call print_string
+
+	loadn r7, #10 ; \n
+	call print_char ; pular uma linha, pois eh um option por linha
+
+	inc r2
+	inc r2
+	store options_vector_current_option, r2 ; options_vector_current_option += 2
+
+	load r1, canvas_cursor_pos
+	store options_canvas_cursor, r1 ; salva a ultima posicao do cursor desse canvas
+display_options_options_left_end:
+	pop r7
+	pop r6
+	pop r2
 	pop r1
 	pop r0
 	rts
@@ -390,6 +757,30 @@ file_2_data : string "
     ......:.:..-  "
 file_2_eof : var #1
 	static file_2_eof + #0, #65535 ; EOF(FFFF)
+file_3_name : string "start" ; 6 bytes
+file_3_name_padding : var #8 ; 8 de padding para dar 14 bytes de file_name
+file_3_cursor : var #1
+file_3_data : string "at1
+sm2
+
+You have been through hell and back,
+but now, it's time to atone for your
+sins in your past cycles. 
+You must find a mate, or die. 
+Which direction do you head?
+
+North
+north_1.txt
+East
+east_1.txt
+South
+south_1.txt
+West
+west_1.txt
+Down
+down_1.txt"
+file_3_eof : var #1
+	static file_3_eof + #0, #65535 ; EOF(FFFF)
 end_of_file_system : var #1
 	static end_of_file_system + #0, #65534 ; EOFS (FFFE), marca que nao ha mais arquivos no file system
 ;--------
