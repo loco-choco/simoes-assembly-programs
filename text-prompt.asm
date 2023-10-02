@@ -615,7 +615,12 @@ reset_canvas_text:
 	loadn r0, #0
 	store text_canvas_cursor, r0
 	store text_lines_current_line, r0
+
 	call free_text_lines
+
+	call setup_canvas_text
+	call canvas_clear
+
 	pop r0
 	rts
 
@@ -735,9 +740,14 @@ setup_canvas_options:
 reset_canvas_options:
 	push r0 ; 0
 	loadn r0, #0
+
 	store options_canvas_cursor, r0
 	store options_vector_current_option, r0
+
 	call free_options_vector
+
+	call setup_canvas_options
+	call canvas_clear
 	pop r0
 	rts
 
