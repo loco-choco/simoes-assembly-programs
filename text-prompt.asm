@@ -130,9 +130,12 @@ sm2
 0
 none
 
-You traverse the rocky, hilly fields,
-as you avoid the large predators 
-that roam this area. 
+You spot a strange slugcat climbing one
+of the towers, unlike any you've seen
+before. It has no mouth with which to
+eat or speak with, and is able to 
+generate spiky bone-like protrusions 
+from its tail.
 
 ...
 north_1_c3"
@@ -146,42 +149,6 @@ sm2
 0
 none
 
-It is here where you hope to 
-find a mate, if they even exist
-in this strange place...
-You spot a strange slugcat climbing one
-of the towers, unlike any you've seen
-before. 
-
-...
-north_1_c4"
-file_north_1_c3_eof : var #1
-	static file_north_1_c3_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c4_name : string "north_1_c4" ; 11 bytes
-file_north_1_c4_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
-file_north_1_c4_cursor : var #1
-file_north_1_c4_data : string "3072
-sm2
-0
-none
-
-It has no mouth with which to eat or
-speak with, and is able to generate
-spiky bone-like protrusions 
-from its tail.
-
-...
-north_1_c5"
-file_north_1_c4_eof : var #1
-	static file_north_1_c4_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c5_name : string "north_1_c5" ; 11 bytes
-file_north_1_c5_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
-file_north_1_c5_cursor : var #1
-file_north_1_c5_data : string "3072
-sm2
-0
-none
-
 It does not react when it notices you,
 giving you a good view of it. 
 Fascinating.
@@ -191,8 +158,8 @@ no
 north_1a
 yes
 north_2"
-file_north_1_c5_eof : var #1
-	static file_north_1_c5_eof + #0, #65535 ; EOF(FFFF)
+file_north_1_c3_eof : var #1
+	static file_north_1_c3_eof + #0, #65535 ; EOF(FFFF)
 end_of_file_system : var #1
 	static end_of_file_system + #0, #65534 ; EOFS (FFFE), marca que nao ha mais arquivos no file system
 ;--------
