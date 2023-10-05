@@ -7,31 +7,30 @@ jmp main
 fs_start:
 ;	IMAGES ------
 ;	SM 	  ---
-file_none_name : string "none" ; 5 bytes
-file_none_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
-file_none_cursor : var #1
-file_none_data : string "
+file_sm1_name : string "sm1" ; 4 bytes
+file_sm1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sm1_cursor : var #1
+file_sm1_data : string "
+                 : 
+                .: 
+               .   
+     .             
                    
                    
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   
-                   "
-file_none_eof : var #1
-	static file_none_eof + #0, #65535 ; EOF(FFFF)
+       -:          
+       #  -.   ..  
+      :* :@*   #%  
+      -* =@%   *@. 
+      -% .@% :=+#  
+      -=  :. :+:   
+      -:           
+      -=        .  
+      =:       ..  
+      =:    .....  
+      .. ....:...  
+      ........ ..  "
+file_sm1_eof : var #1
+	static file_sm1_eof + #0, #65535 ; EOF(FFFF)
 
 file_sm2_name : string "sm2" ; 4 bytes
 file_sm2_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
@@ -98,6 +97,8 @@ Which direction do you head?
 
 north
 north_1_c1
+east
+east
 south
 south
 west
@@ -106,13 +107,13 @@ down
 down"
 file_start_eof : var #1
 	static file_start_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c1_name : string "north_1_c1" ; 11 bytes
-file_north_1_c1_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
+file_north_1_c1_name : string "north_1_c1" ; 10 bytes
+file_north_1_c1_name_padding : var #4 ; 6 de padding para dar 14 bytes de file_name
 file_north_1_c1_cursor : var #1
 file_north_1_c1_data : string "3072
-sm2
+sm1
 0
-none
+sm1
 
 You trek to the north, towards
 a land of towering structures 
@@ -122,77 +123,63 @@ that pierce the heavens.
 north_1_c2"
 file_north_1_c1_eof : var #1
 	static file_north_1_c1_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c2_name : string "north_1_c2" ; 11 bytes
-file_north_1_c2_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
+file_north_1_c2_name : string "north_1_c2" ; 10 bytes
+file_north_1_c2_name_padding : var #4 ; 6 de padding para dar 14 bytes de file_name
 file_north_1_c2_cursor : var #1
 file_north_1_c2_data : string "3072
-sm2
+sm1
 0
 none
 
-You traverse the rocky, hilly fields,
-as you avoid the large predators 
+You traverse the rocky,
+hilly fields, as you avoid 
+the large predators 
 that roam this area. 
 
 ...
 north_1_c3"
 file_north_1_c2_eof : var #1
 	static file_north_1_c2_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c3_name : string "north_1_c3" ; 11 bytes
-file_north_1_c3_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
+file_north_1_c3_name : string "north_1_c3" ; 10 bytes
+file_north_1_c3_name_padding : var #4 ; 6 de padding para dar 14 bytes de file_name
 file_north_1_c3_cursor : var #1
 file_north_1_c3_data : string "3072
-sm2
+sm1
 0
 none
 
-It is here where you hope to 
-find a mate, if they even exist
-in this strange place...
-You spot a strange slugcat climbing one
-of the towers, unlike any you've seen
-before. 
+It is here where you hope 
+to find a mate, if they even
+exist in this strange place...
+You spot a strange slugcat
+climbing one of the towers,
+unlike any you've seen before. 
 
 ...
 north_1_c4"
 file_north_1_c3_eof : var #1
 	static file_north_1_c3_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c4_name : string "north_1_c4" ; 11 bytes
-file_north_1_c4_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
+file_north_1_c4_name : string "north_1_c4" ; 10 bytes
+file_north_1_c4_name_padding : var #4 ; 6 de padding para dar 14 bytes de file_name
 file_north_1_c4_cursor : var #1
 file_north_1_c4_data : string "3072
-sm2
+sm1
 0
 none
 
 It has no mouth with which to eat or
-speak with, and is able to generate
-spiky bone-like protrusions 
-from its tail.
-
-...
-north_1_c5"
-file_north_1_c4_eof : var #1
-	static file_north_1_c4_eof + #0, #65535 ; EOF(FFFF)
-file_north_1_c5_name : string "north_1_c5" ; 11 bytes
-file_north_1_c5_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
-file_north_1_c5_cursor : var #1
-file_north_1_c5_data : string "3072
-sm2
-0
-none
-
-It does not react when it notices you,
-giving you a good view of it. 
-Fascinating.
+speak with, and is able to generate spiky
+bone-like protrusions from its tail. 
+It does not react when it notices you, 
+giving you a good view of it. Fascinating.
 Do you approach it?
 
 no
 north_1a
 yes
 north_2"
-file_north_1_c5_eof : var #1
-	static file_north_1_c5_eof + #0, #65535 ; EOF(FFFF)
+file_north_1_c4_eof : var #1
+	static file_north_1_c4_eof + #0, #65535 ; EOF(FFFF)
 end_of_file_system : var #1
 	static end_of_file_system + #0, #65534 ; EOFS (FFFE), marca que nao ha mais arquivos no file system
 ;--------
