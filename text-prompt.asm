@@ -55,6 +55,54 @@ file_sm2_data : string "
     ......:.:..-  "
 file_sm2_eof : var #1
 	static file_sm2_eof + #0, #65535 ; EOF(FFFF)
+file_sm3_name : string "sm3" ; 4 bytes
+file_sm3_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sm3_cursor : var #1
+file_sm3_data : string "
+       ==         
+       .          
+                  
+                  
+                  
+                  
+    =- ==\\=. //==  
+    *-.@@0: .:+0- 
+    ** *=.  =- / \\
+    */ |   .  .\\_|
+    =|_/:   __     
+    +=.    /  \\.  
+    *.        ..  
+    *       . :   
+    -.   ......   
+    ......:...:.  
+    .             
+                  "
+file_sm3_eof : var #1
+	static file_sm3_eof + #0, #65535 ; EOF(FFFF)
+file_sm4_name : string "sm4" ; 4 bytes
+file_sm4_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sm4_cursor : var #1
+file_sm4_data : string "
+               .. 
+ .             .- 
+ :            . : 
+ .             .- 
+  :            .. 
+  .-.          :  
+    -.  :: :=..:  
+    -  ++=..==++  
+   :: -@-+- .=##  
+   -: -%+*:  -%=  
+   :. .:=- .++.   
+   :.       :.    
+   ::     ......  
+   ::..    .  :.  
+   :.....   . :   
+   :...........   
+   :......... :   
+   .              "
+file_sm4_eof : var #1
+	static file_sm4_eof + #0, #65535 ; EOF(FFFF)
 file_sm5_name : string "sm5" ; 4 bytes
 file_sm5_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
 file_sm5_cursor : var #1
@@ -128,6 +176,54 @@ file_sm7_data : string "
     ...           "
 file_sm7_eof : var #1
 	static file_sm7_eof + #0, #65535 ; EOF(FFFF)
+file_sm8_name : string "sm8" ; 4 bytes
+file_sm8_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sm8_cursor : var #1
+file_sm8_data : string "
+                -=
+.             ..  
+.            .    
+ .                
+  .               
+     .            
+    +=            
+   =#             
+   #*             
+   #*   .    .    
+   #@:          . 
+   *-     \\/    :
+   +             .
+   #-            .
+   #.           .:
+  .#        ....:.
+   :.   .....:...:
+   ............ :-
+                  "
+file_sm8_eof : var #1
+	static file_sm8_eof + #0, #65535 ; EOF(FFFF)
+file_sm9_name : string "sm9" ; 4 bytes
+file_sm9_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sm9_cursor : var #1
+file_sm9_data : string "
+                ..
+                .-
+ .             .  
+  .               
+  .               
+   .              
+    .+            
+    #-   .        
+   .%.            
+   :%- +  =   :   
+   .@= .\\_/ =\\_/- 
+   := .     .::   
+   :+      \\/\\/ . 
+   :*          .. 
+   -=       ...:  
+   ::    .......  
+    ......:.:..-  "
+file_sm9_eof : var #1
+	static file_sm9_eof + #0, #65535 ; EOF(FFFF)
 file_sm10_name : string "sm10" ; 5 bytes
 file_sm10_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
 file_sm10_cursor : var #1
@@ -152,7 +248,56 @@ file_sm10_data : string "
   ......... :     "
 file_sm10_eof : var #1
 	static file_sm10_eof + #0, #65535 ; EOF(FFFF)
+file_sm11_name : string "sm11" ; 5 bytes
+file_sm11_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
+file_sm11_cursor : var #1
+file_sm11_data : string "
+ -..              
+ :              -: 
+ ..:.         ::-.
+ :.-          :=..
+ :.:    .        .
+.-+      :-   .+-.
+-=*. .. -%@:  :@@-
+=#...   =@#-:-=#*.
+=*:..   .+: :*@+-:
+=*+=-. ::-   :: :.
+=*=-..  .-.:::: : 
+-#=:..  ---=-.::: 
+-=:: . .- ::=--.: 
+-..:.=- =..:.::.  
+-:--*-: :+:--=    
+::-+==.  .-=-:    
+..:-*+:   :::     
+..:-*+:. ==       
+..:=++: :*:       "
+file_sm11_eof : var #1
+	static file_sm11_eof + #0, #65535 ; EOF(FFFF)
 ;	SP	   ---
+file_sp1_name : string "sp1" ; 4 bytes
+file_sp1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sp1_cursor : var #1
+file_sp1_data : string "
+   ..              
+ .:::              
+ ::::        ..::: 
+ ::::      .::::::.
+ :::.    .:::::::::
+ .::... .:::::::::.
+  .::::::::::::::. 
+  *+.::=::         
+ -@#::*@-:.        
+ +@*.:%@#::        
+ -#-::%@%::        
+::::::-*=::        
+.::::::.::.        
+ .:::::::.         
+   .::::.          
+   ::::::          
+   ::::::          
+    ..:.:.        "
+file_sp1_eof : var #1
+	static file_sp1_eof + #0, #65535 ; EOF(FFFF)
 file_sp1a_name : string "sp1a" ; 5 bytes
 file_sp1a_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
 file_sp1a_cursor : var #1
@@ -181,52 +326,280 @@ file_sp2_name : string "sp2" ; 4 bytes
 file_sp2_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
 file_sp2_cursor : var #1
 file_sp2_data : string "
-      ..        .  
-     ::::    .:::: 
-    .::::. .::::::.
-    :::::  :::::::.
-   .::::. :::::::: 
-   ::.....:::::::. 
-   .::::::::::::.  
-  .::::::::::.     
-  ::::...::::.     
- -%#-::==--:::     
- +@#:::%@@@=::     
-.:-::::-##+.::     
-.:::::::::.:..     
- .::::::::.:.      
-   ..::::.         
-     :::::         
-     ::::::        
-    .::::::.       
-     .....         "
+      ..        . 
+     ::::    .::::
+    .::::. .::::::
+    :::::  :::::::
+   .::::. ::::::::
+   ::.....:::::::.
+   .::::::::::::. 
+  .::::::::::.    
+  ::::...::::.    
+ -%#-::==--:::    
+ +@#:::%@@@=::    
+.:-::::-##+.::    
+.:::::::::.:..    
+ .::::::::.:.     
+   ..::::.        
+     :::::        
+     ::::::       
+    .::::::.      
+     .....        "
 file_sp2_eof : var #1
 	static file_sp2_eof + #0, #65535 ; EOF(FFFF)
 file_sp2b_name : string "sp2b" ; 5 bytes
 file_sp2b_name_padding : var #9 ; 10 de padding para dar 14 bytes de file_name
 file_sp2b_cursor : var #1
 file_sp2b_data : string "
-      ..        .  
-     ::::    .:::: 
-    .::::. .::::::.
-    :::::  :::::::.
-   .::::. :::::::: 
-   ::.....:::::::. 
-   .:::::::::::::.  
-  \\:::::::/::.     
-  :\\::.../:::.     
- -%#-::==--:::     
- +@#:::%@@@=U:     
-.:-::::-##+.U:     
-.:::::::::.U..     
- .::::::::.:.      
-   ..::::.         
-     :::::         
-     ::::::        
-    .::::::.       
-     .....         "
+      ..        . 
+     ::::    .::::
+    .::::. .::::::
+    :::::  :::::::
+   .::::. ::::::::
+   ::.....:::::::.
+   .:::::::::::::. 
+  \\:::::::/::.    
+  :\\::.../:::.    
+ -%#-::==--:::    
+ +@#:::%@@@=U:    
+.:-::::-##+.U:    
+.:::::::::.U..    
+ .::::::::.:.     
+   ..::::.        
+     :::::        
+     ::::::       
+    .::::::.      
+     .....        "
 file_sp2b_eof : var #1
 	static file_sp2b_eof + #0, #65535 ; EOF(FFFF)
+file_sp4_name : string "sp4" ; 4 bytes
+file_sp4_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sp4_cursor : var #1
+file_sp4_data : string "
+      ..          
+    .:::.      ... 
+    :::::    .::::
+   .::::.  .::::::
+   :::::  ::::::::
+  .:..:..:::::::::
+  ..::::::::::::. 
+  .#=.:::-:::..    
+  *@+.::#@:::.     
+  %@:..+@@+.::     
+  --:..*@@=.::     
+....-:.:+=.:::     
+ :::\\\\:.  \\\\:      
+  .::::::::.       
+     .:::::.       
+     .::::::       
+     .::::::.      
+     ::::::::      
+      .....       "
+file_sp4_eof : var #1
+	static file_sp4_eof + #0, #65535 ; EOF(FFFF)
+file_sp5_name : string "sp5" ; 4 bytes
+file_sp5_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sp5_cursor : var #1
+file_sp5_data : string "
+   ..             
+  :::             
+ ::::.        ..:.
+ ::::.      .::::.
+ ::::     .::::::.
+ .::.    .::::::::
+  ..::::::::::::: 
+  -=:::::::...... 
+  +#.:.*+..       
+ \\+-/:\\++/.:      
+ =/\\.:*/\\=:.      
+./+-\\:/%#\\:.       
+::.::::--.:       
+ :::::::::.       
+  .::::::.        
+   .::::.         
+   .:::::         
+   .::::::        
+    ......        "
+file_sp5_eof : var #1
+	static file_sp5_eof + #0, #65535 ; EOF(FFFF)
+;	VT	   ---
+file_vt2_name : string "vt2" ; 4 bytes
+file_vt2_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_vt2_cursor : var #1
+file_vt2_data : string "
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+   .-==+==-.      
+ :*%@@@@@@@%=     
+:@@@@%%%%%%@@-    
++*:-=%@#-::-@+    
+:*---%@#----@:    
+ =@%@@%@@%%@=     
+  #@%%%%%%%=      
+  -@#.:#%#        
+   -=  =*         
+                  "
+file_vt2_eof : var #1
+	static file_vt2_eof + #0, #65535 ; EOF(FFFF)
+file_vt3_name : string "vt3" ; 4 bytes
+file_vt3_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_vt3_cursor : var #1
+file_vt3_data : string "
+                  
+                  
+                  
+          :       
+       .=-.       
+     :*=-     .=
+     -*:  ..   .-.
+     #+ +#*#+   =%
+     *+==%*#@-  -+
+    :*:##%*-#: .*%
+    ##.#%@%*=.*%+-
+   .= :=**-.:=*+. 
+  -:   ..  -%+.   
+  =.      :%%:    
+ -        -+.     
+.       .=        
+        :-        
+       -.         
+      .           "
+file_vt3_eof : var #1
+	static file_vt3_eof + #0, #65535 ; EOF(FFFF)
+;	LIZ	   ---
+file_rl1b_name : string "rl1b" ; 5 bytes
+file_rl1b_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
+file_rl1b_cursor : var #1
+file_rl1b_data : string "
+                  
+        ::.       
+      . -:.       
+     .-:-:        
+     .-:---.      
+     :--:----:    
+    .-------:--.  
+     :------ .--: 
+    :::---:-- ---.
+  . :=----.:-:---:
+  ...::---..-----.
+ .... .---. ::-:- 
+. ......---  .--: 
+  ....  .--:.  .  
+ .......  --:     
+. ......   :-:    
+    .....         
+                  
+                  "
+file_rl1b_eof : var #1
+	static file_rl1b_eof + #0, #65535 ; EOF(FFFF)
+file_rl2_name : string "rl2" ; 4 bytes
+file_rl2_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_rl2_cursor : var #1
+file_rl2_data : string "
+                  
+       .::        
+       .:- .      
+        :-:-.     
+      :---:-.     
+    :----:--:     
+  .----------.    
+ :---.:-----:     
+.---. .:---:::    
+:---..------=: .  
+.---:--:---::...  
+ -----::---. .... 
+ :-:--:---...... .
+  ---::--.  ....  
+  .--:--  ....... 
+    .::   ...... .
+         .....    
+                  
+                  "
+file_rl2_eof : var #1
+	static file_rl2_eof + #0, #65535 ; EOF(FFFF)
+file_bl1_name : string "bl1" ; 4 bytes
+file_bl1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_bl1_cursor : var #1
+file_bl1_data : string "
+            ..    
+       ...-==     
+     :=+++++:     
+   -=+++++++...   
+ .=++++++++= .... 
+ =+-=+++++++=.....
+.+=:=+++=+++=.....
+:+=*-=+-=U++- ....
+-+=#%-+-=+++- ....
+-++:-+++U++++.....
+=+++++++++++=.....
+-++++++=-+++. ....
+:=+++++==+++......
+:+++-+++++++: ....
+.+=-=+++++=-. ... 
+ =--++++=:    ... 
+ .=+++=:       .  
+  -==:            
+                  "
+file_bl1_eof : var #1
+	static file_bl1_eof + #0, #65535 ; EOF(FFFF)
+file_bl2_name : string "bl2" ; 4 bytes
+file_bl2_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_bl2_cursor : var #1
+file_bl2_data : string "
+           ..     
+       ...-==     
+     :=+++++:     
+   -=+++++++...   
+ .-++++++++= .... 
+ =-=+++++=++=.....
+.+=.-+=+U-++=.....
+:=-#---++-U+- ....
+:=-#%::=+U++- ....
+-=-.::-=++==+.....
+-=--:-//:+-==.....
+-=////=+-+=+. ....
+:===--++++++......
+:+=-:=+==+++: ....
+.+=:+++:=+=-. ...
+ =-=++++=:    ... 
+ .=+++=:       .  
+  -==:            
+                  "
+file_bl2_eof : var #1
+	static file_bl2_eof + #0, #65535 ; EOF(FFFF)
+;	DLL	   ---
+file_dll1_name : string "dll1" ; 5 bytes
+file_dll1_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
+file_dll1_cursor : var #1
+file_dll1_data : string "
+   =*##*.  ::   :+
+  *+:..-#.*@@%:-#-
+ =+     :@@@*@@%  
+ .   .*%#@@@==@+  
+     #%@@@@@*%@-  
+    :@+@@%@@@@@***
+    -*:*@@@%@@@%-:
+    .%*@@@@@@@#@# 
+   .=@@@@@@@@@==@.
+ :**=%@@@@@@@%*+@ 
+-#- +%@%@@@@@@@@= 
+%  *=+@==%@@@@#.  
+%..# -@%*@@@@.*-  
+:#%-  =#%%%+*. #  
+  **        +-++  
+   #:       ##=   
+   -.      :*     
+           *:     
+          .*      "
+file_dll1_eof : var #1
+	static file_dll1_eof + #0, #65535 ; EOF(FFFF)
 ;	AT	   ---
 file_at1_name : string "at1" ; 4 bytes
 file_at1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
@@ -252,6 +625,84 @@ file_at1_data : string "
    .::::...       "
 file_at1_eof : var #1
 	static file_at1_eof + #0, #65535 ; EOF(FFFF)
+;	GM	   ---
+file_gm1_name : string "gm1" ; 4 bytes
+file_gm1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_gm1_cursor : var #1
+file_gm1_data : string "
+                  
+.+#*-         :-. 
++%%%%+      =#%%#-
+*%%%%#     *%%%%%*
+*%%%%#    *%%%%%%+
++%%%#+:. .#%%%%%%:
+:%%%#%%####%%%%%= 
+ #%=-#%%*+#%%%#-  
+ --  =@*   #%=.   
+ =:  *@=   -#     
+.*%*##%#:  +#     
++%%%*#*%%##%%+    
++%%#***%%%%%%*    
+ =##%%%%%%%%*.    
+  :#%%%##**+      
+ .#%%%%###%%-     
+ :%%%%%%%%%%*     
+  +%%%%%%%%*.     
+   :+***+=:       "
+file_gm1_eof : var #1
+	static file_gm1_eof + #0, #65535 ; EOF(FFFF)
+;	RV	   ---
+file_rv1_name : string "rv1" ; 4 bytes
+file_rv1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_rv1_cursor : var #1
+file_rv1_data : string "
+    .+        --  
+    +%+      *%#: 
+   .###     +%#%= 
+   :###:   -###%+ 
+   :###:  .####%= 
+   :###.  +%##%*  
+   .##*-::##%#*.  
+    **####%##=    
+    =+%%+ =%+     
+      +%.  *#.    
+      =%   -%:-+=.
+ .-.  =%   +%*#*+:
+:***:.*%+ :*#+.   
+:.=+*##########:  
+ :**+##*#%##*-*+  
+ .=* .=%%*+ -+ -. 
+  -=  =####- =.   
+      #%%%#-      
+     .+*+=.       "
+file_rv1_eof : var #1
+	static file_rv1_eof + #0, #65535 ; EOF(FFFF)
+;	SA	   ---
+file_sa1_name : string "sa1" ; 4 bytes
+file_sa1_name_padding : var #10 ; 10 de padding para dar 14 bytes de file_name
+file_sa1_cursor : var #1
+file_sa1_data : string "
+ -#-              
+ %@%-             
+-@@@#             
+*@@@%      :===-  
+*@@@#    -#@@@@@%-
+*@%#*+-.+@@@@@@@@#
+*%#%@@@%@@@@@@@@@*
++%%%%@@@@@@@@@@@%.
+=@@@@@@@@@%#%%#=. 
+=@@@@@@@@@*       
+*@@@@@%#%@%       
++%%@#++*#@%       
+:#%%@@@@@@*       
+*@@@@@@@@#.       
+*@@%%@@@*         
+ -++*#%@%.        
+    *%@@@*        
+   .%@@@@%.       
+   .=*##+:        "
+file_sa1_eof : var #1
+	static file_sa1_eof + #0, #65535 ; EOF(FFFF)
 ;	SALAS ------
 file_start_name : string "start" ; 6 bytes
 file_start_name_padding : var #8 ; 8 de padding para dar 14 bytes de file_name
@@ -273,10 +724,83 @@ south
 south
 west
 west
+east
+east
 down
 down"
 file_start_eof : var #1
 	static file_start_eof + #0, #65535 ; EOF(FFFF)
+file_south_name : string "south" ; 6 bytes
+file_south_name_padding : var #8 ; 8 de padding para dar 14 bytes de file_name
+file_south_cursor : var #1
+file_south_data : string "3072
+sm5
+2304
+at1
+
+You find an explosive slugcat.
+They spear on you sight.
+You die.
+
+restart
+start"
+file_south_eof : var #1
+	static file_south_eof + #0, #65535 ; EOF(FFFF)
+file_west_name : string "west" ; 5 bytes
+file_west_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
+file_west_cursor : var #1
+file_west_data : string "3072
+sm5
+2816
+gm1
+
+You find a rotund slugcat climbing
+a tree. Your arrival scares them and
+they fall on you.
+You get crushed.
+
+restart
+start"
+file_west_eof : var #1
+	static file_west_eof + #0, #65535 ; EOF(FFFF)
+file_east_name : string "east" ; 5 bytes
+file_east_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
+file_east_cursor : var #1
+file_east_data : string "3072
+sm5
+3584
+rv1
+
+You find a wet slugcat swimming at
+the shoreline. You try to get close to
+give a better look but a large 
+mechanical eel jumps from the water
+and closes its hydraulic jaws on you.
+You die.
+
+restart
+start"
+file_east_eof : var #1
+	static file_east_eof + #0, #65535 ; EOF(FFFF)
+file_down_name : string "down" ; 5 bytes
+file_down_name_padding : var #9 ; 9 de padding para dar 14 bytes de file_name
+file_down_cursor : var #1
+file_down_data : string "3072
+sm5
+768
+sa1
+
+Tou arrive at a weird dark place,
+there you find a green slugcat.
+The slugcat open its eyes, which glow
+with pupils that look like crosses2231a
+321389423fnYOU ASCENDybedWS&r734bdfhvfy
+dwas nDUI278yed8uabjB YdgysbAJK8iwu89h2
+
+restart
+start"
+file_down_eof : var #1
+	static file_down_eof + #0, #65535 ; EOF(FFFF)
 file_north_1_c1_name : string "north_1_c1" ; 11 bytes
 file_north_1_c1_name_padding : var #3 ; 3 de padding para dar 14 bytes de file_name
 file_north_1_c1_cursor : var #1
@@ -465,6 +989,371 @@ share in their frustration
 north_6b"
 file_north_5_eof : var #1
 	static file_north_5_eof + #0, #65535 ; EOF(FFFF)
+file_north_6a_name : string "north_6a" ; 9 bytes
+file_north_6a_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_6a_cursor : var #1
+file_north_6a_data : string "3072
+sm9
+1280
+sp2
+
+You lean your mouth towards their tail
+and they immediately jump back.
+>Eww, what do you think you're trying
+to do?< You continue after them until
+they're backed into the edge 
+of the platform.
+
+go for the kill
+north_6a2"
+file_north_6a_eof : var #1
+	static file_north_6a_eof + #0, #65535 ; EOF(FFFF)
+file_north_6a2_name : string "north_6a2" ; 10 bytes
+file_north_6a2_name_padding : var #4 ; 4 de padding para dar 14 bytes de file_name
+file_north_6a2_cursor : var #1
+file_north_6a2_data : string "3072
+sm5
+1280
+sp2
+
+As you approach, sharp needles suddenly
+erupt out of every hole in their tail,
+piercing through your body in multiple
+places. 
+You die pretty much immediately.
+
+restart
+start"
+file_north_6a2_eof : var #1
+	static file_north_6a2_eof + #0, #65535 ; EOF(FFFF)
+file_north_6b_name : string "north_6b" ; 9 bytes
+file_north_6b_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_6b_cursor : var #1
+file_north_6b_data : string "3072
+sm2
+1280
+sp1
+
+>i get how it feels to be nerfed<
+You pat spearmaster on the shoulder
+>i gotta eat so much food, its dumb<
+>yeah, i guess you have it rough too.
+These developers hate us.< Spearmaster
+looks at you with deep understanding
+
+give spearmaster a hug
+north_7"
+file_north_6b_eof : var #1
+	static file_north_6b_eof + #0, #65535 ; EOF(FFFF)
+file_north_7_name : string "north_7" ; 8 bytes
+file_north_7_name_padding : var #6 ; 6 de padding para dar 14 bytes de file_name
+file_north_7_cursor : var #1
+file_north_7_data : string "3072
+sm9
+1280
+sp3
+
+>it's ok, we slugcats need to stick 
+together. ilu bby <3<
+>Thank you, I needed to hear that...
+speaking of nerfed, I'm hungry and 
+need to find nutrients.< Spearmaster
+generates a fresh spear from their tail
+
+lets go search for food
+north_8
+wat about me?
+north_10
+i got eggs on the house
+north_9"
+file_north_7_eof : var #1
+	static file_north_7_eof + #0, #65535 ; EOF(FFFF)
+file_north_8_name : string "north_8" ; 8 bytes
+file_north_8_name_padding : var #6 ; 6 de padding para dar 14 bytes de file_name
+file_north_8_cursor : var #1
+file_north_8_data : string "3072
+sm9
+1280
+sp4
+
+You and spearmaster climb to the roof
+of the tower in search of food. You
+overlook the canopies of structures out
+in the distance. The view is industrial
+but beautiful. You lean your head
+against spearmaster's shoulder.
+
+this is nice. <3
+north_8b"
+file_north_8_eof : var #1
+	static file_north_8_eof + #0, #65535 ; EOF(FFFF)
+file_north_8b_name : string "north_8b" ; 9 bytes
+file_north_8b_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8b_cursor : var #1
+file_north_8b_data : string "3072
+sm11
+1280
+sp5
+
+A loud noise fires from the sky and
+a large harpoon immediately skewers
+spearmaster's chest cavity. Their 
+corpse is hoisted up into the sky by
+a string.
+
+what?!?!
+north_8c"
+file_north_8b_eof : var #1
+	static file_north_8b_eof + #0, #65535 ; EOF(FFFF)
+file_north_8c_name : string "north_8c" ; 9 bytes
+file_north_8c_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8c_cursor : var #1
+file_north_8c_data : string "3072
+sm3
+2816
+vt3
+
+>Eyy, I'm the vulture king and this is
+our territory. Get lost, buddy.<
+
+u just killed my boyfriend!
+north_8d"
+file_north_8c_eof : var #1
+	static file_north_8c_eof + #0, #65535 ; EOF(FFFF)
+file_north_8d_name : string "north_8d" ; 9 bytes
+file_north_8d_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8d_cursor : var #1
+file_north_8d_data : string "3072
+sm3
+3584
+vt2
+
+>You got a problem with that? Our boss
+here does what he wants. We rule this
+canopy.<
+
+i'll get my revenge!!
+north_8e"
+file_north_8d_eof : var #1
+	static file_north_8d_eof + #0, #65535 ; EOF(FFFF)
+file_north_8e_name : string "north_8e" ; 9 bytes
+file_north_8e_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8e_cursor : var #1
+file_north_8e_data : string "3072
+sm3
+255
+vt2
+
+>Raising your voice, eh?! We'll teach
+you a lesson you won't forget. You won't
+forget the wrath of the vulture gang.<
+
+grab a spear off the ground.
+north_8f"
+file_north_8e_eof : var #1
+	static file_north_8e_eof + #0, #65535 ; EOF(FFFF)
+file_north_8f_name : string "north_8f" ; 9 bytes
+file_north_8f_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8f_cursor : var #1
+file_north_8f_data : string "2304
+rl1b
+2816
+vt3
+
+Before you get a chance to react, red
+balls of spit begin to pelt the 
+vultures. >You vultures think you rule
+this canopy? Not when I'm around.<
+The red lizard makes quick chase, and 
+the three vultures decide to escape.
+
+threaten the red lizard with your spear
+north_8g"
+file_north_8f_eof : var #1
+	static file_north_8f_eof + #0, #65535 ; EOF(FFFF)
+file_north_8g_name : string "north_8g" ; 9 bytes
+file_north_8g_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8g_cursor : var #1
+file_north_8g_data : string "3072
+sm3
+2304
+rl2
+
+>Woah, wait, that's not necessary. I'm
+not here to eat you.< >i'm used to 
+dealing with red lizards, dont think
+u can pull anything on me, foul beast!<
+>No, no, I just wanted to introduce you
+to my friend. They're kinda of shy.<
+
+sure i guess??
+north_8h"
+file_north_8g_eof : var #1
+	static file_north_8g_eof + #0, #65535 ; EOF(FFFF)
+file_north_8h_name : string "north_8h" ; 9 bytes
+file_north_8h_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8h_cursor : var #1
+file_north_8h_data : string "3072
+sm8
+1280
+none
+
+The red lizard runs off to get their
+friend like a good wingman.
+
+what is even happening right now
+north_8i"
+file_north_8h_eof : var #1
+	static file_north_8h_eof + #0, #65535 ; EOF(FFFF)
+file_north_8i_name : string "north_8i" ; 9 bytes
+file_north_8i_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8i_cursor : var #1
+file_north_8i_data : string "3072
+sm8
+3584
+bl1
+
+>Hello it's ... nice to meet you....??<
+>uh, hey, wats up?<
+>I, uh ... ummm.... I just think you're
+like.... pretty cute ...<
+>oh. thanks.<
+
+so, do u come here often?
+north_8j"
+file_north_8i_eof : var #1
+	static file_north_8i_eof + #0, #65535 ; EOF(FFFF)
+file_north_8j_name : string "north_8j" ; 9 bytes
+file_north_8j_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8j_cursor : var #1
+file_north_8j_data : string "3072
+sm8
+3584
+bl2
+
+>Hahaha.... oh yeah.... this is like my
+hang out spot! uhhh, oh my gosh....<
+>are u okay?<>Ohh...i'm just nervous!<
+>it's fine, deep breaths, u dont need 
+to be nervous<>Oh woww, that's so 
+understanding of you! I.... love you.<
+
+what??
+north_8k"
+file_north_8j_eof : var #1
+	static file_north_8j_eof + #0, #65535 ; EOF(FFFF)
+file_north_8k_name : string "north_8k" ; 9 bytes
+file_north_8k_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8k_cursor : var #1
+file_north_8k_data : string "3072
+sm11
+1280
+none
+
+Before you get the chance to say
+anything else, a tentacle slaps the
+back of the lizard and pulls them off 
+the edge of the tower. You hear a faint
+slurping sound before more tentacles 
+emerge over the edge.
+
+panic
+north_8l"
+file_north_8k_eof : var #1
+	static file_north_8k_eof + #0, #65535 ; EOF(FFFF)
+file_north_8l_name : string "north_8l" ; 9 bytes
+file_north_8l_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8l_cursor : var #1
+file_north_8l_data : string "3072
+sm3
+1024
+dll1
+
+This situation has gotten out of
+control. Too much is happening at once.
+>Glooodgldloolldloo-ooololglopglopp!!<
+>thats not an appropriate thing to say<
+>Glglglgl-ooooo-loplplplpl!<>this is an
+all ages dating sim, watch your mouth.<
+
+throw your spear at the creature
+north_8m"
+file_north_8l_eof : var #1
+	static file_north_8l_eof + #0, #65535 ; EOF(FFFF)
+file_north_8b_name : string "north_8m" ; 9 bytes
+file_north_8b_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_8m_cursor : var #1
+file_north_8m_data : string "3072
+sm5
+1024
+dll1
+
+It has little effect, and the creature
+quickly ensares you in its tentacles.
+You are dragged into its rotten maw 
+where your body is dissolved away.
+
+restart
+start"
+file_north_8m_eof : var #1
+	static file_north_8m_eof + #0, #65535 ; EOF(FFFF)
+file_north_9_name : string "north_9" ; 8 bytes
+file_north_9_name_padding : var #6 ; 6 de padding para dar 14 bytes de file_name
+file_north_9_cursor : var #1
+file_north_9_data : string "3072
+sm5
+1280
+none
+
+You pull out your trusty egg that
+you carry with you all the time.
+Spearmaster throws a spear at it,
+and the egg immediately distorts
+the space around it. You both get
+sucked in the black hole and die.
+
+restart
+start"
+file_north_9_eof : var #1
+	static file_north_9_eof + #0, #65535 ; EOF(FFFF)
+file_north_10_name : string "north_10" ; 9 bytes
+file_north_10_name_padding : var #5 ; 5 de padding para dar 14 bytes de file_name
+file_north_10_cursor : var #1
+file_north_10_data : string "3072
+sm4
+1280
+sp2b
+
+>Hmm? you need food too?<
+>no i mean ... u can siphon my 
+nutrients... with ur spears...<
+>WHAT??<
+>it's ok-< >You want me to stab you?
+You'll die.<
+
+please
+north_10b"
+file_north_10_eof : var #1
+	static file_north_10_eof + #0, #65535 ; EOF(FFFF)
+file_north_10b_name : string "north_10b" ; 8 bytes
+file_north_10b_name_padding : var #4 ; 4 de padding para dar 14 bytes de file_name
+file_north_10b_cursor : var #1
+file_north_10b_data : string "3072
+sm5
+1280
+sp2b
+
+>Man, whatever, I don't have time
+for this, the rain is coming.<
+Spearmaster chucks the spear at 
+your torso. It's not a pleasant
+experience. Your nutrients leave
+your body.
+
+restart
+start"
+file_north_10b_eof : var #1
+	static file_north_10b_eof + #0, #65535 ; EOF(FFFF)
 end_of_file_system : var #1
 	static end_of_file_system + #0, #65534 ; EOFS (FFFE), marca que nao ha mais arquivos no file system
 ;--------
